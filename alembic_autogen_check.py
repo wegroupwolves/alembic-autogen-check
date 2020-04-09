@@ -1,6 +1,9 @@
 import itertools
 import typing as t
+import sys
 from pprint import pformat
+
+from os.path import dirname
 
 import click
 from alembic.command import revision
@@ -8,7 +11,7 @@ from alembic.config import Config
 from alembic.operations.ops import MigrationScript
 
 __version__ = "1.1.1"
-
+sys.path.append(dirname(__file__))
 
 def simulate_autogenerate(config_path: str) -> t.List[tuple]:
     """Simulate the `alembic revision --autogenerate` command
