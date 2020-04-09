@@ -1,9 +1,8 @@
 import itertools
-import typing as t
 import sys
-from pprint import pformat
-
+import typing as t
 from os.path import dirname
+from pprint import pformat
 
 import click
 from alembic.command import revision
@@ -29,26 +28,15 @@ def simulate_autogenerate(config_path: str) -> t.List[tuple]:
         directives[:] = []
 
     revision(
-        config=config,
-        autogenerate=True,
-        process_revision_directives=process_revision_directives,
+        config=config, autogenerate=True, process_revision_directives=process_revision_directives,
     )
-    return list(
-        itertools.chain.from_iterable(
-            op.as_diffs()
-            for script in revisions
-            for op in script.upgrade_ops_list
-        )
-    )
+    return list(itertools.chain.from_iterable(op.as_diffs() for script in revisions for op in script.upgrade_ops_list))
 
 
 @click.command(context_settings=dict(help_option_names=["-h", "--help"]))
 @click.version_option(version=__version__)
 @click.option(
-    "--config",
-    type=click.Path(exists=True, dir_okay=False),
-    default="alembic.ini",
-    help="Path to alembic.ini file.",
+    "--config", type=click.Path(exists=True, dir_okay=False), default="alembic.ini", help="Path to alembic.ini file.",
 )
 @click.pass_context
 def main(ctx: click.Context, config: str):
@@ -56,16 +44,11 @@ def main(ctx: click.Context, config: str):
     diff = simulate_autogenerate(config)
     if diff:
         click.secho(
-            "ERROR: Migrations are out of sync with models. Diff:",
-            fg="red",
-            err=True,
+            "ERROR: Migrations are out of sync with models. Diff:", fg="red", err=True,
         )
         click.secho(pformat(diff, indent=2), fg="red", err=True)
         click.echo(err=True)
-        command = click.style(
-            "PYTHONPATH=. alembic revision --autogenerate -m 'Your message'",
-            bold=True,
-        )
+        command = click.style("PYTHONPATH=. alembic revision --autogenerate -m 'Your message'", bold=True,)
         click.echo(f"You may need to run `{command}`.", err=True)
         ctx.exit(1)
     else:
