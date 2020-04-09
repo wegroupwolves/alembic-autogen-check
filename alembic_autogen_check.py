@@ -68,4 +68,4 @@ def main(ctx: click.Context, config: str):
 
 
 if __name__ == "__main__":
-    main()
+    exit(main())
