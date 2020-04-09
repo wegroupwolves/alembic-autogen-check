@@ -11,7 +11,9 @@ from alembic.config import Config
 from alembic.operations.ops import MigrationScript
 
 __version__ = "1.1.1"
-sys.path.append(dirname(__file__))
+
+sys.path.append(os.getcwd())
+
 
 def simulate_autogenerate(config_path: str) -> t.List[tuple]:
     """Simulate the `alembic revision --autogenerate` command
