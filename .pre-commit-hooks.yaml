@@ -1,0 +1,6 @@
+-   id: alembic-autogen-check
+    name: "Check if alembic migrations are ins sync with db models"
+    entry: alembic-autogen-check
+    language: python
+    pass_filenames: false
+    always_run: true
